@@ -8,17 +8,21 @@ dotenv.config();
 const app = express();
 
 app.use(express.json());
+
 app.use(express.urlencoded({ extended: true }));
 
 app.get("/users", async (req: Request, res: Response): Promise<void> => {
   const users = await read();
   res.json(users);
+
+  console.log("hello");
 });
 
 app.post("/users", async (req: Request, res: Response): Promise<void> => {
   const users = await read();
   const newUser = {
     id: users.length ? users.length + 1 : 1,
+
     name: req.body.name,
     email: req.body.email,
     password: req.body.password,
