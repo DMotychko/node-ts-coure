@@ -1,7 +1,7 @@
 import fs from "node:fs/promises";
 import path from "node:path";
 
-import { IUser } from "./models/IUser";
+import { IUser } from "../models/IUser";
 
 const pathToFile = path.join(process.cwd(), "db", "users.json");
 
