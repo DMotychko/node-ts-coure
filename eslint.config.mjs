@@ -45,9 +45,8 @@ export default [{
             tsconfigRootDir: "C:\\Users\\motic\\IdeaProjects\\node-ts-coure",
         },
     },
-
     rules: {
-        indent: ["error", 2],
+        indent: ["error", 4],
         quotes: ["error", "double"],
         semi: ["error", "always"],
         "@typescript-eslint/interface-name-prefix": "off",
@@ -71,6 +70,8 @@ export default [{
 
         "prettier/prettier": ["error", {
             endOfLine: "auto",
+            useTabs: false,
+            tabWidth: 4,
         }],
 
         "no-console": "warn",

@@ -1,50 +1,33 @@
-import { IUser } from "../models/IUser";
-import { IUserDto } from "../models/IUserDto";
-import { read, write } from "../services/fs.service";
+import { IUser, IUserCreateDto, IUserUpdateDto } from "../interfaces/IUser";
+import { User } from "../models/user.model";
 
 class UserRepository {
-  public async getList(): Promise<IUser[]> {
-    return await read();
-  }
+    public async getList(): Promise<IUser[]> {
+        return await User.find();
+    }
 
-  public async create(dto: IUserDto): Promise<IUser> {
-    const users = await read();
-    const newUser = {
-      id: users.length ? users[users.length - 1].id + 1 : 1,
-      name: dto.name,
-      email: dto.email,
-      password: dto.password,
-    };
-    users.push(newUser);
-    await write(users);
-    return newUser;
-  }
+    public async create(dto: IUserCreateDto): Promise<IUser> {
+        return await User.create(dto);
+    }
 
-  public async getById(userId: number): Promise<IUser> {
-    const users = await read();
-    return users.find((user) => user.id === userId);
-  }
+    public async getByEmail(email: string): Promise<IUser> {
+        return await User.findOne({ email });
+    }
 
-  public async changeById(dto: IUserDto, userId: number): Promise<IUser> {
-    const users = await read();
-    const index = users.findIndex((user) => user.id === userId);
+    public async getById(userId: string): Promise<IUser> {
+        return await User.findById(userId);
+    }
 
-    const user = users[index];
-    user.name = dto.name;
-    user.email = dto.email;
-    user.password = dto.password;
+    public async changeById(
+        dto: IUserUpdateDto,
+        userId: string,
+    ): Promise<IUser> {
+        return await User.findByIdAndUpdate(userId, dto, { new: true });
+    }
 
-    await write(users);
-    return user;
-  }
-
-  public async deleteById(userId: number): Promise<void> {
-    const users = await read();
-    const index = users.findIndex((user) => user.id === userId);
-
-    users.splice(index, 1);
-    await write(users);
-  }
+    public async deleteById(userId: string): Promise<void> {
+        await User.deleteOne({ _id: userId });
+    }
 }
 
 export const userRepository = new UserRepository();
