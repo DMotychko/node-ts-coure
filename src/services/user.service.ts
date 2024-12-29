@@ -1,6 +1,7 @@
 import { ApiError } from "../errors/api-error";
 import { IUser, IUserCreateDto, IUserUpdateDto } from "../interfaces/IUser";
 import { userRepository } from "../repositories/user.repository";
+import { passwordService } from "./password.service";
 
 class UserService {
     public async getList(): Promise<IUser[]> {
@@ -8,7 +9,8 @@ class UserService {
     }
     public async create(dto: IUserCreateDto): Promise<IUser> {
         await this.isEmailUnique(dto.email);
-        return await userRepository.create(dto);
+        const password = await passwordService.hashPassword(dto.password);
+        return await userRepository.create({ ...dto, password: password });
     }
     public async getById(userId: string): Promise<IUser> {
         const user = await userRepository.getById(userId);
